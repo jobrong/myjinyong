@@ -33,7 +33,7 @@ public class ThirdStepDriver {
 
         /*job.setJar("/home/hadoop/wc.jar");*/
         //指定本程序的jar包所在的本地路径
-        job.setJarByClass(ThirdStepMap.class);
+        job.setJarByClass(ThirdStepDriver.class);
 
         //指定本业务job要使用的mapper/Reducer业务类
         job.setMapperClass(ThirdStepMap.class);

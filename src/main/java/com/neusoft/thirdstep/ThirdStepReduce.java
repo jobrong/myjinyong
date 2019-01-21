@@ -22,7 +22,7 @@ public class ThirdStepReduce extends Reducer<Text,Text,Text,Text> {
         List<String> list1 = new ArrayList();
         List<Double> list2 = new ArrayList();
         Double sum = 0.0;
-        String string = "\t";
+        String string = "0.1#";
         for (Text value : values) {
             String[] split = value.toString().split(":");
             sum += Double.parseDouble(split[1]);

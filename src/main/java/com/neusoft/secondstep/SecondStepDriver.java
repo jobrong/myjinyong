@@ -32,7 +32,7 @@ public class SecondStepDriver {
 
         /*job.setJar("/home/hadoop/wc.jar");*/
         //指定本程序的jar包所在的本地路径
-        job.setJarByClass(SecondStepMap.class);
+        job.setJarByClass(SecondStepDriver.class);
 
         //指定本业务job要使用的mapper/Reducer业务类
         job.setMapperClass(SecondStepMap.class);

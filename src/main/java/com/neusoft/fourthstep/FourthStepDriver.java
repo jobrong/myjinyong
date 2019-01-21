@@ -16,45 +16,88 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class FourthStepDriver {
 
     public static void main(String[] args) throws Exception {
-        FileUtil.deleteDir(args[1]);
+        boolean res = false;
+        for (int i = 1; i < 11; i++) {
+            int j=i-1;
+            if (i==1){
 
-        System.setProperty("hadoop.home.dir", "e:/hadoop-2.8.3");
-        System.setProperty("HADOOP_USER_NAME", "root") ;
-        if (args == null || args.length == 0) {
-            return;
-        }
+                FileUtil.deleteDir("output4/output4-1/");
 
-        //该对象会默认读取环境中的 hadoop 配置。当然，也可以通过 set 重新进行配置
-        Configuration conf = new Configuration();
+                System.setProperty("hadoop.home.dir", "e:/hadoop-2.8.3");
+                System.setProperty("HADOOP_USER_NAME", "root") ;
 
-        //job 是 yarn 中任务的抽象。
-        Job job = Job.getInstance(conf);
+                //该对象会默认读取环境中的 hadoop 配置。当然，也可以通过 set 重新进行配置
+                Configuration conf = new Configuration();
 
-        /*job.setJar("/home/hadoop/wc.jar");*/
-        //指定本程序的jar包所在的本地路径
-        job.setJarByClass(FourthStepMap.class);
+                //job 是 yarn 中任务的抽象。
+                Job job = Job.getInstance(conf);
 
-        //指定本业务job要使用的mapper/Reducer业务类
-        job.setMapperClass(FourthStepMap.class);
-        job.setReducerClass(FourthStepReduce.class);
+            /*job.setJar("/home/hadoop/wc.jar");*/
+                //指定本程序的jar包所在的本地路径
+                job.setJarByClass(FourthStepDriver.class);
+
+                //指定本业务job要使用的mapper/Reducer业务类
+                job.setMapperClass(FourthStepMap.class);
+                job.setReducerClass(FourthStepReduce.class);
 //        job.setCombinerClass(FirstStepReduce.class);
 
-        //指定mapper输出数据的kv类型。需要和 Mapper 中泛型的类型保持一致
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Text.class);
+                //指定mapper输出数据的kv类型。需要和 Mapper 中泛型的类型保持一致
+                job.setMapOutputKeyClass(Text.class);
+                job.setMapOutputValueClass(Text.class);
 
-        //指定最终输出的数据的kv类型。这里也是 Reduce 的 key，value类型。
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+                //指定最终输出的数据的kv类型。这里也是 Reduce 的 key，value类型。
+                job.setOutputKeyClass(Text.class);
+                job.setOutputValueClass(Text.class);
 
-        //指定job的输入原始文件所在目录
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-        //指定job的输出结果所在目录
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+                //指定job的输入原始文件所在目录
+                FileInputFormat.setInputPaths(job, new Path("output3/part-r-00000"));
+                //指定job的输出结果所在目录
+                FileOutputFormat.setOutputPath(job, new Path("output4/output4-1/"));
 
-        //将job中配置的相关参数，以及job所用的java类所在的jar包，提交给yarn去运行
-        /*job.submit();*/
-        boolean res = job.waitForCompletion(true);
+                //将job中配置的相关参数，以及job所用的java类所在的jar包，提交给yarn去运行
+            /*job.submit();*/
+                res = job.waitForCompletion(true);
+            }else {
+
+                FileUtil.deleteDir("output4/output4-"+i+"/");
+
+                System.setProperty("hadoop.home.dir", "e:/hadoop-2.8.3");
+                System.setProperty("HADOOP_USER_NAME", "root") ;
+
+
+                //该对象会默认读取环境中的 hadoop 配置。当然，也可以通过 set 重新进行配置
+                Configuration conf = new Configuration();
+
+                //job 是 yarn 中任务的抽象。
+                Job job = Job.getInstance(conf);
+
+            /*job.setJar("/home/hadoop/wc.jar");*/
+                //指定本程序的jar包所在的本地路径
+                job.setJarByClass(FourthStepDriver.class);
+
+                //指定本业务job要使用的mapper/Reducer业务类
+                job.setMapperClass(FourthStepMap.class);
+                job.setReducerClass(FourthStepReduce.class);
+//        job.setCombinerClass(FirstStepReduce.class);
+
+                //指定mapper输出数据的kv类型。需要和 Mapper 中泛型的类型保持一致
+                job.setMapOutputKeyClass(Text.class);
+                job.setMapOutputValueClass(Text.class);
+
+                //指定最终输出的数据的kv类型。这里也是 Reduce 的 key，value类型。
+                job.setOutputKeyClass(Text.class);
+                job.setOutputValueClass(Text.class);
+
+                //指定job的输入原始文件所在目录
+                FileInputFormat.setInputPaths(job, new Path("output4/output4-"+j+"/part-r-00000"));
+                //指定job的输出结果所在目录
+                FileOutputFormat.setOutputPath(job, new Path("output4/output4-"+i+"/"));
+
+                //将job中配置的相关参数，以及job所用的java类所在的jar包，提交给yarn去运行
+            /*job.submit();*/
+                res = job.waitForCompletion(true);
+            }
+        }
         System.exit(res?0:1);
     }
 }
